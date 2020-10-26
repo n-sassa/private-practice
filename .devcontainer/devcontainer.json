@@ -1,0 +1,18 @@
+{
+    "name": "web",
+    "dockerComposeFIle": "docker-compose.yml",
+    "service": "web",
+    "workspaceFolder": "/home/user1/dev",
+    "extensions": [
+		"ms-python.python",
+		"ms-python.vscode-pylance",
+		"ms-azuretools.vscode-docker"
+	],
+	"dockerComposeFile": "docker-compose.yml",
+	"settings": {
+		"terminal.integrated.shell.linux": "/bin/bash"
+	},
+	"remoteEnv": {
+		"LOCAL_WORKSPACE_FOLDER": "${localWorkspaceFolder}"
+	}
+}

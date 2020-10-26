@@ -1,0 +1,5 @@
+Django
+djangorestframework
+mysqlclient
+mysql-connector-python
+uwsgi

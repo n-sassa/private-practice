@@ -1,0 +1,57 @@
+version: "3.7"
+
+services:
+    nginx: 
+        image: nginx:1.17
+        ports:
+            - "8080:8080"
+        volumes:
+            - ./nginx/conf:/etc/nginx/conf.d
+            - ./nginx/uwsgi_params:/etc/nginx/uwsgi_params
+            - ./static:/static
+        networks:
+            app_net:
+                ipv4_address: 172.20.0.4
+        depends_on:
+            - web
+    
+    db:
+        build: ./db
+        expose:
+            - "3306"
+        networks:
+            app_net:
+                ipv4_address: 172.20.0.3
+        environment:
+            MYSQL_ROOT_USER: root
+            MYSQL_ROOT_PASSWORD: root
+            TZ: "Asia/Tokyo"
+        volumes:
+            - ../db/database:/var/lib/mysql
+    
+    web:
+        build: ./web
+        command: uwsgi --socket :8001 --module mysite.wsgi --logto /tmp/uwsgi.log
+        volumes:
+            - ../web:/home/user1/dev
+        networks:
+            app_net:
+                ipv4_address: 172.20.0.2
+        expose:
+            - "8001"
+        depends_on:
+            - db
+        links:
+            - db
+
+networks:
+  app_net:
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+        - subnet: 172.20.0.0/24
+
+volumes:
+    django.db.volume:
+        name: django.db.volume
